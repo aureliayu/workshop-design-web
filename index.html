@@ -1,8 +1,206 @@
 <!DOCTYPE html>
-<html>
+<html lang="id">
 <head>
-  <meta http-equiv="refresh" content="0; url=PajakIn/login.html">
-  <title>PajakIn</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Selamat Datang - PajakIn</title>
+
+  <link rel="icon" href="PajakIn/assets/images/logo-maroon.svg">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    * { box-sizing: border-box; }
+
+    body {
+      min-height: 100vh;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      font-family: Inter, system-ui, sans-serif;
+      color: #2b2b2b;
+      background: radial-gradient(circle at 0 0, #f6e6ea 0, #fff 45%), #fff;
+    }
+
+    /* Header & logo */
+    .top {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 28px 6vw;
+      font-size: 20px;
+      font-weight: 700;
+      color: #6b1f33;
+    }
+    .top img { width: 36px; height: 36px; }
+
+    /* Dua kolom: teks sambutan + kartu tips */
+    main {
+      flex: 1;
+      display: grid;
+      grid-template-columns: 1.05fr 1fr;
+      gap: 48px;
+      align-items: center;
+      padding: 0 6vw;
+    }
+
+    h1 {
+      margin: 0 0 20px;
+      font-size: clamp(32px, 4.2vw, 52px);
+      font-weight: 800;
+      line-height: 1.15;
+      color: #561627;
+    }
+    h1 span { color: #6b1f33; }
+
+    .lead {
+      max-width: 560px;
+      margin: 0;
+      font-size: 17px;
+      line-height: 1.7;
+      color: #555;
+    }
+
+    .go {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 28px;
+      padding: 16px 30px;
+      border-radius: 999px;
+      background: #6b1f33;
+      color: #fff;
+      font-weight: 600;
+      text-decoration: none;
+      box-shadow: 0 10px 24px rgba(107, 31, 51, .3);
+      transition: .2s;
+    }
+    .go:hover { background: #561627; transform: translateY(-2px); }
+
+    /* Kartu tips */
+    .cards { display: grid; gap: 20px; }
+
+    .cd {
+      padding: 26px 28px;
+      border: 1px solid #f0e6e8;
+      border-radius: 24px;
+      background: #fff;
+      box-shadow: 0 12px 40px rgba(86, 22, 39, .1);
+    }
+
+    .hd {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 8px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid #f0e9e9;
+    }
+    .hd h2 { margin: 0 0 2px; font-size: 20px; }
+    .hd small { color: #777; }
+
+    .ic {
+      display: grid;
+      place-items: center;
+      flex-shrink: 0;
+      width: 48px;
+      height: 48px;
+      border-radius: 14px;
+      font-size: 22px;
+    }
+    .ok .ic { background: #dff5ea; color: #1f9d63; }
+    .no .ic { background: #fde6e8; color: #d6404f; }
+
+    .it { display: flex; gap: 14px; padding: 12px 0; }
+    .it i { margin-top: 2px; font-size: 20px; }
+    .ok .it i { color: #1f9d63; }
+    .no .it i { color: #d6404f; }
+    .it b { display: block; font-size: 15px; color: #561627; }
+    .it span { font-size: 13.5px; color: #666; }
+
+    footer {
+      padding: 22px;
+      text-align: center;
+      font-size: 13px;
+      color: #777;
+    }
+
+    @media (max-width: 860px) {
+      main { grid-template-columns: 1fr; gap: 32px; padding-bottom: 24px; }
+    }
+  </style>
 </head>
-<body></body>
+
+<body>
+
+  <div class="top">
+    <img src="PajakIn/assets/images/logo-maroon.svg" alt="">
+    PajakIn
+  </div>
+
+  <main>
+    <section>
+      <h1>Selamat Datang!<br>Anda akan masuk ke <span>PajakIn</span></h1>
+
+      <p class="lead">
+        Pastikan Anda menggunakan perangkat dan jaringan yang aman sebelum
+        melanjutkan proses login. Dengan melanjutkan, Anda menyetujui
+        ketentuan penggunaan aplikasi PajakIn.
+      </p>
+
+      <a href="PajakIn/login.html" class="go">
+        Lanjutkan ke Login <i class="bi bi-arrow-right"></i>
+      </a>
+    </section>
+
+    <section class="cards">
+
+      <div class="cd ok">
+        <div class="hd">
+          <span class="ic"><i class="bi bi-shield-check"></i></span>
+          <div>
+            <h2>Praktik Aman</h2>
+            <small>Lindungi akun dengan kebiasaan digital yang aman.</small>
+          </div>
+        </div>
+
+        <div class="it"><i class="bi bi-lock"></i>
+          <div><b>Gunakan password yang kuat</b><span>Buat password unik, panjang, dan sulit ditebak.</span></div>
+        </div>
+        <div class="it"><i class="bi bi-arrow-repeat"></i>
+          <div><b>Perbarui sistem dan peramban</b><span>Pastikan OS dan browser selalu mutakhir.</span></div>
+        </div>
+        <div class="it"><i class="bi bi-wifi"></i>
+          <div><b>Akses dari jaringan tepercaya</b><span>Gunakan jaringan, wifi, atau VPN yang tepercaya.</span></div>
+        </div>
+      </div>
+
+      <div class="cd no">
+        <div class="hd">
+          <span class="ic"><i class="bi bi-exclamation-triangle"></i></span>
+          <div>
+            <h2>Hindari Hal Ini</h2>
+            <small>Kebiasaan yang dapat membahayakan akun Anda.</small>
+          </div>
+        </div>
+
+        <div class="it"><i class="bi bi-person-x"></i>
+          <div><b>Membagikan password</b><span>Jangan berikan password kepada siapa pun.</span></div>
+        </div>
+        <div class="it"><i class="bi bi-link-45deg"></i>
+          <div><b>Mengklik tautan mencurigakan</b><span>Hindari tautan asing dari WhatsApp atau email.</span></div>
+        </div>
+        <div class="it"><i class="bi bi-unlock"></i>
+          <div><b>Meninggalkan perangkat terbuka</b><span>Selalu kunci perangkat Anda saat tidak digunakan.</span></div>
+        </div>
+      </div>
+
+    </section>
+  </main>
+
+  <footer>
+    &copy; 2026 PajakIn. Proyek PBL Workshop Desain Web (simulasi, bukan layanan pajak resmi).
+  </footer>
+
+</body>
 </html>
