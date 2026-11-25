@@ -338,7 +338,21 @@ function render(title, sub, html, search) {
     document.getElementById('app').innerHTML = `
         <div class="app">
 
-            <aside class="sb">
+            <!-- Bar atas khusus HP: tombol garis tiga membuka sidebar -->
+            <header class="mbar">
+                <button class="burger" id="burger" type="button" aria-label="Buka menu" aria-expanded="false">
+                    <span></span><span></span><span></span>
+                </button>
+
+                <span class="mbrand">
+                    <img src="${ROOT}assets/images/logo-white.svg" alt="">
+                    PajakIn
+                </span>
+            </header>
+
+            <div class="sb-overlay" id="sbOverlay"></div>
+
+            <aside class="sb" id="sidebar">
                 <div class="brand">
                     <span class="lt"><img src="${ROOT}assets/images/logo-white.svg" class="logo" alt=""></span>
                     PajakIn
@@ -381,6 +395,23 @@ function render(title, sub, html, search) {
 
         </div>
     `;
+
+    // Sidebar di HP: buka dan tutup lewat tombol garis tiga
+    const sidebar = document.getElementById('sidebar'),
+        burger = document.getElementById('burger'),
+        overlay = document.getElementById('sbOverlay');
+
+    const toggleMenu = open => {
+        sidebar.classList.toggle('open', open);
+        overlay.classList.toggle('show', open);
+        burger.setAttribute('aria-expanded', open);
+        document.body.classList.toggle('no-scroll', open);
+    };
+
+    burger.onclick = () => toggleMenu(!sidebar.classList.contains('open'));
+    overlay.onclick = () => toggleMenu(false);
+    sidebar.querySelectorAll('nav a').forEach(a => a.addEventListener('click', () => toggleMenu(false)));
+    document.addEventListener('keydown', e => e.key === 'Escape' && toggleMenu(false));
 }
 
 function notify(m, t = 'success') {
@@ -600,3 +631,48 @@ const readImg = f => new Promise(res => {
     r.onerror = () => res('');
     r.readAsDataURL(f);
 });
+
+// CSS menu HP (garis tiga) disisipkan dari sini, jadi cukup mengganti global.js
+(() => {
+    if (document.getElementById('mobile-css')) return;
+
+    const st = document.createElement('style');
+    st.id = 'mobile-css';
+    st.textContent = `
+        .mbar, .sb-overlay { display: none; }
+        body.no-scroll { overflow: hidden; }
+
+        @media (max-width: 767px) {
+            .mbar {
+                position: sticky; top: 0; z-index: 1030;
+                display: flex; align-items: center; gap: 12px;
+                padding: 10px 16px; background: #6b1f33; color: #fff;
+            }
+            .burger {
+                display: grid; place-content: center; gap: 5px;
+                width: 42px; height: 42px; border: 0; border-radius: 11px;
+                background: rgba(255, 255, 255, .14); cursor: pointer;
+            }
+            .burger span { display: block; width: 20px; height: 2px; border-radius: 2px; background: #fff; }
+            .mbrand { display: flex; align-items: center; gap: 8px; font-size: 18px; font-weight: 700; }
+            .mbrand img { width: 26px; height: 26px; }
+
+            .sb {
+                box-sizing: border-box; position: fixed; top: 0; left: 0; bottom: 0;
+                z-index: 1050; width: 270px; max-width: 82vw; height: 100%;
+                padding: 22px 16px; transform: translateX(-100%); transition: transform .25s ease;
+            }
+            .sb.open { transform: none; }
+            .sb nav { flex-direction: column; flex-wrap: nowrap; }
+            .sb .brand { margin-bottom: 28px; }
+            .nav-label, .sb::after, .sb nav a.on::before { display: block; }
+
+            .sb-overlay {
+                position: fixed; inset: 0; z-index: 1040; display: block;
+                background: rgba(40, 8, 18, .55); opacity: 0; pointer-events: none; transition: opacity .25s;
+            }
+            .sb-overlay.show { opacity: 1; pointer-events: auto; }
+        }
+    `;
+    document.head.appendChild(st);
+})();
