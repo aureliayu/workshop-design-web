@@ -90,73 +90,27 @@ PAGES.dashboard = () => {
 
 // --- DATA UMKM ---
 PAGES['data-umkm'] = () => {
-  let editingId = null;
-  const fields = ['nama', 'pem', 'uid', 'pw', 'tel'];
-
-  const inputFieldsHtml = [
-    ['nama', 'Nama usaha'],
-    ['pem', 'Nama pemilik'],
-    ['uid', 'ID pengguna (NIK/NPWP/NITKU)'],
-    ['pw', 'Password'],
-    ['tel', 'Nomor telepon'],
-  ]
-    .map(
-      ([id, label]) => `
-        <label class="form-label small mb-1">${label}</label>
-        <input id="f_${id}" class="form-control mb-2">`
-    )
-    .join('');
-
   render(
     'Data UMKM',
-    'Tambah, ubah, dan cari data UMKM.',
+    'Kelola data UMKM, setujui pengajuan akun, dan atur status akun.',
     `
-    <div class="row g-3">
-      <div class="col-xl-8">
-        <div class="card-x">
-          <select id="fs" class="form-select w-auto mb-3">
-            <option value="">Semua status</option>
-            <option>Aktif</option>
-            <option>Nonaktif</option>
-          </select>
-          <div id="tb"></div>
-        </div>
-      </div>
-      <div class="col-xl-4">
-        <div class="card-x">
-          <h2 id="ft">Tambah UMKM</h2>
-          ${inputFieldsHtml}
-          <label class="form-label small mb-1">Jenis usaha</label>
-          <select id="f_jn" class="form-select mb-2">
-            <option>Kuliner</option>
-            <option>Perdagangan</option>
-            <option>Jasa</option>
-          </select>
-          <label class="form-label small mb-1">Status akun</label>
-          <select id="f_st" class="form-select mb-2">
-            <option>Aktif</option>
-            <option>Nonaktif</option>
-          </select>
-          <div id="err" class="text-danger small mb-2"></div>
-          <button id="sv" class="btn btn-maroon">Simpan</button>
-          <button id="bt" class="btn btn-light">Batal</button>
-        </div>
-      </div>
+    <div class="card-x h-auto mb-3">
+      <h2>Permintaan akun <span id="rc" class="badge text-bg-warning fw-normal"></span></h2>
+      <div id="rq"></div>
+    </div>
+
+    <div class="card-x h-auto">
+      <select id="fs" class="form-select w-auto mb-3">
+        <option value="">Semua status</option>
+        <option>Aktif</option>
+        <option>Nonaktif</option>
+      </select>
+      <div id="tb"></div>
     </div>`,
     1
   );
 
-  const resetForm = () => {
-    editingId = null;
-    ft.textContent = 'Tambah UMKM';
-    fields.forEach((key) => {
-      $('f_' + key).value = '';
-    });
-    f_jn.selectedIndex = 0;
-    f_st.selectedIndex = 0;
-    err.textContent = '';
-  };
-
+  // --- Daftar UMKM: lihat detail, aktifkan atau nonaktifkan akun ---
   const renderTable = () => {
     const keyword = q.value.toLowerCase();
     const filtered = umkmData.filter(
@@ -178,7 +132,11 @@ PAGES['data-umkm'] = () => {
             <td>${bdg(u.status)}</td>
             <td class="text-nowrap">
               <button class="btn btn-sm btn-outline-secondary" onclick="dt('${u.id}')">Detail</button>
-              <button class="btn btn-sm btn-outline-maroon" onclick="eu('${u.id}')">Edit</button>
+              ${
+                u.status === 'Aktif'
+                  ? `<button class="btn btn-sm btn-outline-danger" onclick="ubahStatus('${u.id}')">Nonaktifkan</button>`
+                  : `<button class="btn btn-sm btn-maroon" onclick="ubahStatus('${u.id}')">Aktifkan</button>`
+              }
             </td>
           </tr>`
       )
@@ -197,6 +155,7 @@ PAGES['data-umkm'] = () => {
       ['Pemilik', u.pemilik],
       ['Jenis usaha', u.jenis],
       ['Telepon', u.telp],
+      ['Omzet setahun', u.omzetTahun != null ? rp(u.omzetTahun) : '-'],
       ['Terdaftar', u.tgl],
       ['Status', bdg(u.status)],
     ]
@@ -206,72 +165,116 @@ PAGES['data-umkm'] = () => {
     modal('Detail UMKM', `<dl class="row mb-0">${details}</dl>`);
   };
 
-  window.eu = (id) => {
+  // Aktifkan atau nonaktifkan akun (akun nonaktif tidak bisa login)
+  window.ubahStatus = (id) => {
     const u = umkmData.find((x) => x.id === id);
     if (!u) return;
 
-    editingId = id;
-    ft.textContent = 'Ubah UMKM';
-    f_nama.value = u.nama;
-    f_pem.value = u.pemilik;
-    f_uid.value = u.id;
-    f_pw.value = u.pw;
-    f_tel.value = u.telp;
-    f_jn.value = u.jenis;
-    f_st.value = u.status;
-    err.textContent = '';
+    u.status = u.status === 'Aktif' ? 'Nonaktif' : 'Aktif';
+    save();
+    renderTable();
+    notify(`Akun ${u.nama} sekarang ${u.status.toLowerCase()}.`, u.status === 'Aktif' ? 'success' : 'warning');
   };
 
-  bt.onclick = resetForm;
+  // --- Permintaan akun dari halaman depan (Ajukan akun) ---
+  const refreshBadge = (n) => {
+    const el = document.querySelector('.sb nav a[href="data-umkm.html"] .nb');
+    if (!el) return;
+    if (n) el.textContent = n;
+    else el.remove();
+  };
 
-  sv.onclick = () => {
-    const values = Object.fromEntries(fields.map((key) => [key, $('f_' + key).value.trim()]));
+  const renderRequests = () => {
+    const pending = reqData.filter((r) => r.status === 'Menunggu');
 
-    if (fields.some((key) => !values[key])) {
-      err.textContent = 'Semua kolom wajib diisi.';
-      return;
-    }
-    if (!/^\d{10,20}$/.test(values.uid)) {
-      err.textContent = 'ID pengguna harus berupa angka (10-20 digit).';
-      return;
-    }
-    if (!/^[\d\s+-]{8,}$/.test(values.tel)) {
-      err.textContent = 'Nomor telepon tidak valid.';
-      return;
-    }
-    if (umkmData.some((u) => u.id === values.uid && u.id !== editingId)) {
-      err.textContent = 'ID pengguna sudah terdaftar.';
-      return;
+    $('rc').textContent = pending.length;
+    $('rc').classList.toggle('d-none', !pending.length);
+    refreshBadge(pending.length);
+
+    $('rq').innerHTML = pending.length
+      ? table(
+          ['Nama usaha', 'Pemilik', 'ID pengguna', 'Jenis', 'Telepon', 'Omzet/tahun', 'Diajukan', 'Aksi'],
+          pending
+            .map(
+              (r) => `
+              <tr>
+                <td>${r.nama}</td>
+                <td>${r.pemilik}</td>
+                <td>${r.uid}</td>
+                <td>${r.jenis}</td>
+                <td>${r.telp}</td>
+                <td>
+                  ${r.omzetTahun != null ? rp(r.omzetTahun) : '-'}
+                  ${r.bukti ? `<button class="btn btn-sm btn-link p-0 ms-1" onclick="lihatBukti(${r.id})">Bukti</button>` : ''}
+                </td>
+                <td>${r.tgl}</td>
+                <td class="text-nowrap">
+                  <button class="btn btn-sm btn-maroon" onclick="reqSetuju(${r.id})">Setujui</button>
+                  <button class="btn btn-sm btn-outline-danger" onclick="reqTolak(${r.id})">Tolak</button>
+                </td>
+              </tr>`
+            )
+            .join('')
+        )
+      : '<p class="text-muted small mb-0">Tidak ada permintaan akun baru.</p>';
+  };
+
+  // Lihat bukti omzet tahunan yang diunggah saat pengajuan
+  window.lihatBukti = (id) => {
+    const r = reqData.find((x) => x.id === id);
+    if (!r) return;
+
+    modal(
+      'Bukti omzet - ' + r.nama,
+      `<p class="small text-muted mb-2">Omzet setahun: <b>${rp(r.omzetTahun)}</b> | File: ${r.bukti}</p>` +
+        (r.img
+          ? `<img src="${r.img}" class="img-fluid rounded border" alt="Bukti omzet">`
+          : '<div class="text-muted small">Pratinjau tidak tersedia untuk file PDF.</div>')
+    );
+  };
+
+  // Setujui: buat akun UMKM aktif dari data pengajuan, langsung muncul di tabel
+  window.reqSetuju = (id) => {
+    const r = reqData.find((x) => x.id === id);
+    if (!r) return;
+
+    if (umkmData.some((u) => u.id === r.uid)) {
+      return notify('ID pengguna sudah terdaftar.', 'danger');
     }
 
-    const payload = {
-      id: values.uid,
-      pw: values.pw,
-      nama: values.nama,
-      pemilik: values.pem,
-      jenis: f_jn.value,
-      telp: values.tel,
-      status: f_st.value,
-    };
+    umkmData.push({
+      id: r.uid,
+      pw: r.pw,
+      role: 'user',
+      nama: r.nama,
+      pemilik: r.pemilik,
+      jenis: r.jenis,
+      telp: r.telp,
+      omzetTahun: r.omzetTahun,
+      tgl: tgl(),
+      status: 'Aktif',
+    });
 
-    if (editingId) {
-      const existing = umkmData.find((x) => x.id === editingId);
-      paymentData.forEach((p) => {
-        if (p.uid === editingId) p.uid = payload.id;
-      });
-      Object.assign(existing, payload);
-    } else {
-      umkmData.push({ ...payload, role: 'user', tgl: tgl() });
-    }
-
+    r.status = 'Disetujui';
     save();
-    resetForm();
+    renderRequests();
     renderTable();
-    notify('Data UMKM disimpan.');
+    notify('Akun dibuat. UMKM sudah bisa login.');
+  };
+
+  window.reqTolak = (id) => {
+    const r = reqData.find((x) => x.id === id);
+    if (!r) return;
+
+    r.status = 'Ditolak';
+    save();
+    renderRequests();
+    notify('Pengajuan ditolak.', 'warning');
   };
 
   q.oninput = fs.onchange = renderTable;
   renderTable();
+  renderRequests();
 };
 
 // --- VERIFIKASI PEMBAYARAN ---
