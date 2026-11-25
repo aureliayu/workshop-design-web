@@ -3,204 +3,413 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Selamat Datang - PajakIn</title>
+  <title>PajakIn - Sistem Informasi Pajak Online untuk UMKM</title>
 
   <link rel="icon" href="PajakIn/assets/images/logo-maroon.svg">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Montserrat:wght@600;700;800&display=swap" rel="stylesheet">
 
   <style>
+    :root {
+      --maroon: #6b1f33;
+      --deep: #561627;
+      --dark: #3d0f1d;
+      --tint: #f6e6ea;
+      --ink: #1d1d1d;
+      --muted: #666;
+      --line: #e9dfe1;
+      --ok: #1f9d63;
+    }
     * { box-sizing: border-box; }
-
+    html { scroll-behavior: smooth; }
     body {
-      min-height: 100vh;
       margin: 0;
-      display: flex;
-      flex-direction: column;
       font-family: Inter, system-ui, sans-serif;
-      color: #2b2b2b;
-      background: radial-gradient(circle at 0 0, #f6e6ea 0, #fff 45%), #fff;
-    }
-
-    /* Header & logo */
-    .top {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 28px 6vw;
-      font-size: 20px;
-      font-weight: 700;
-      color: #6b1f33;
-    }
-    .top img { width: 36px; height: 36px; }
-
-    /* Dua kolom: teks sambutan + kartu tips */
-    main {
-      flex: 1;
-      display: grid;
-      grid-template-columns: 1.05fr 1fr;
-      gap: 48px;
-      align-items: center;
-      padding: 0 6vw;
-    }
-
-    h1 {
-      margin: 0 0 20px;
-      font-size: clamp(32px, 4.2vw, 52px);
-      font-weight: 800;
-      line-height: 1.15;
-      color: #561627;
-    }
-    h1 span { color: #6b1f33; }
-
-    .lead {
-      max-width: 560px;
-      margin: 0;
-      font-size: 17px;
-      line-height: 1.7;
-      color: #555;
-    }
-
-    .go {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      margin-top: 28px;
-      padding: 16px 30px;
-      border-radius: 999px;
-      background: #6b1f33;
-      color: #fff;
-      font-weight: 600;
-      text-decoration: none;
-      box-shadow: 0 10px 24px rgba(107, 31, 51, .3);
-      transition: .2s;
-    }
-    .go:hover { background: #561627; transform: translateY(-2px); }
-
-    /* Kartu tips */
-    .cards { display: grid; gap: 20px; }
-
-    .cd {
-      padding: 26px 28px;
-      border: 1px solid #f0e6e8;
-      border-radius: 24px;
+      color: var(--ink);
       background: #fff;
-      box-shadow: 0 12px 40px rgba(86, 22, 39, .1);
+      line-height: 1.6;
     }
+    h1, h2, h3 { font-family: Montserrat, Inter, sans-serif; margin: 0; }
+    a { color: inherit; }
+    section[id] { scroll-margin-top: 24px; }
+    .wrap { width: min(1180px, 100% - 12vw); margin-inline: auto; }
+    :focus-visible { outline: 3px solid #d9a3ae; outline-offset: 3px; }
 
-    .hd {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      margin-bottom: 8px;
-      padding-bottom: 16px;
-      border-bottom: 1px solid #f0e9e9;
+    /* ---------- Header ---------- */
+    .nav { display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 28px 0; }
+    .brand { display: flex; align-items: center; gap: 10px; font: 700 19px Montserrat, sans-serif; color: var(--maroon); text-decoration: none; }
+    .brand img { width: 34px; height: 34px; }
+    .links { display: flex; gap: 30px; }
+    .links a { text-decoration: none; font-weight: 500; font-size: 15px; }
+    .links a:hover { color: var(--maroon); }
+    .btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 12px 26px; border-radius: 999px; border: 1.5px solid transparent;
+      font: 600 15px Inter, sans-serif; text-decoration: none; cursor: pointer; transition: .2s;
     }
-    .hd h2 { margin: 0 0 2px; font-size: 20px; }
-    .hd small { color: #777; }
+    .btn-dark { background: #111; color: #fff; padding: 11px 24px; }
+    .btn-dark:hover { background: var(--maroon); }
+    .btn-main { background: var(--maroon); color: #fff; padding: 17px 34px; font-size: 17px; }
+    .btn-main:hover { background: var(--deep); }
+    .btn-line { border-color: var(--maroon); color: var(--maroon); background: transparent; padding: 15px 28px; font-size: 16px; }
+    .btn-line:hover { background: var(--tint); }
 
-    .ic {
-      display: grid;
-      place-items: center;
-      flex-shrink: 0;
-      width: 48px;
-      height: 48px;
-      border-radius: 14px;
-      font-size: 22px;
+    /* ---------- Hero ---------- */
+    .hero { display: grid; grid-template-columns: 1.05fr 1fr; gap: 40px; align-items: center; padding: 28px 0 80px; }
+    .eyebrow { margin: 0 0 22px; font-size: 13px; font-weight: 600; letter-spacing: .22em; text-transform: uppercase; }
+    .hero h1 { font-size: clamp(38px, 5.3vw, 68px); font-weight: 800; line-height: 1.08; letter-spacing: -.02em; }
+    .hero h1 span { color: var(--maroon); }
+    .hero .lead { max-width: 520px; margin: 24px 0 32px; font-size: 18px; color: var(--muted); }
+    .cta { display: flex; flex-wrap: wrap; gap: 14px; }
+    .pills { display: flex; flex-wrap: wrap; gap: 12px; max-width: 560px; margin-top: 56px; }
+    .pills span { padding: 8px 18px; border: 1px solid #8d8d8d; border-radius: 999px; font-size: 14px; color: #444; }
+
+    .vis { position: relative; aspect-ratio: 520 / 580; width: 100%; max-width: 560px; justify-self: end; }
+    .shape { position: absolute; inset: 0; width: 100%; height: 100%; }
+
+    .receipt {
+      position: absolute; left: -9%; top: 17%; width: 66%;
+      padding: 24px; border-radius: 22px; background: #fff;
+      box-shadow: 0 24px 60px rgba(61, 15, 29, .35);
     }
-    .ok .ic { background: #dff5ea; color: #1f9d63; }
-    .no .ic { background: #fde6e8; color: #d6404f; }
+    .receipt small { color: var(--muted); font-size: 13px; }
+    .receipt .amt { display: block; margin: 2px 0 14px; font: 800 34px Montserrat, sans-serif; color: var(--maroon); letter-spacing: -.01em; }
+    .receipt .row { display: flex; justify-content: space-between; padding: 8px 0; border-top: 1px solid var(--line); font-size: 14px; }
+    .receipt .pay { margin-top: 14px; padding: 12px; border-radius: 12px; background: var(--maroon); color: #fff; text-align: center; font-weight: 600; font-size: 14px; }
 
-    .it { display: flex; gap: 14px; padding: 12px 0; }
-    .it i { margin-top: 2px; font-size: 20px; }
-    .ok .it i { color: #1f9d63; }
-    .no .it i { color: #d6404f; }
-    .it b { display: block; font-size: 15px; color: #561627; }
-    .it span { font-size: 13.5px; color: #666; }
-
-    footer {
-      padding: 22px;
-      text-align: center;
-      font-size: 13px;
-      color: #777;
+    .mini {
+      position: absolute; right: -3%; top: 7%; width: 42%;
+      padding: 16px 18px 12px; border-radius: 18px; background: var(--tint);
+      box-shadow: 0 16px 40px rgba(61, 15, 29, .3);
     }
-
-    @media (max-width: 860px) {
-      main { grid-template-columns: 1fr; gap: 32px; padding-bottom: 24px; }
+    .mini b { font-size: 13px; }
+    .mini .bars { display: flex; align-items: flex-end; gap: 6px; height: 74px; margin-top: 10px; }
+    .mini .bars i { flex: 1; border-radius: 4px 4px 0 0; background: #d9a3ae; }
+    .mini .bars i:last-child { background: var(--maroon); }
+    .chip {
+      position: absolute; right: 4%; bottom: 14%;
+      display: flex; align-items: center; gap: 10px; padding: 12px 18px;
+      border-radius: 16px; background: #fff; font-weight: 600; font-size: 14px;
+      box-shadow: 0 16px 40px rgba(61, 15, 29, .3);
     }
+    .chip i { color: var(--ok); font-size: 22px; }
+    .chip small { display: block; font-weight: 400; color: var(--muted); font-size: 12px; line-height: 1.3; }
+
+    /* ---------- Sections ---------- */
+    .sec { padding: 84px 0; }
+    .sec.alt { background: #faf6f6; }
+    .sec h2 { max-width: 640px; font-size: clamp(28px, 3.4vw, 42px); font-weight: 800; line-height: 1.15; letter-spacing: -.015em; }
+    .sec .sub { max-width: 560px; margin: 14px 0 0; color: var(--muted); font-size: 17px; }
+
+    .feat { display: grid; grid-template-columns: repeat(4, 1fr); gap: 36px; margin-top: 52px; }
+    .feat div { padding-top: 22px; border-top: 3px solid var(--maroon); }
+    .feat i { font-size: 28px; color: var(--maroon); }
+    .feat h3 { margin: 12px 0 8px; font-size: 18px; }
+    .feat p { margin: 0; color: var(--muted); font-size: 15px; }
+
+    .steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; margin-top: 52px; counter-reset: s; }
+    .steps li { position: relative; list-style: none; padding: 0 24px 0 0; counter-increment: s; }
+    .steps li::before {
+      content: counter(s); display: grid; place-items: center;
+      width: 44px; height: 44px; margin-bottom: 18px; border-radius: 50%;
+      background: var(--maroon); color: #fff; font: 700 17px Montserrat, sans-serif; position: relative; z-index: 1;
+    }
+    .steps li::after { content: ""; position: absolute; top: 22px; left: 44px; right: 0; height: 2px; background: #d9a3ae; }
+    .steps li:last-child::after { display: none; }
+    .steps h3 { margin-bottom: 6px; font-size: 17px; }
+    .steps p { margin: 0; color: var(--muted); font-size: 15px; }
+    .steps ul { margin: 0; padding: 0; display: contents; }
+
+    .tarif { display: grid; grid-template-columns: .9fr 1.1fr; gap: 0; border-radius: 32px; overflow: hidden; background: var(--dark); color: #fff; }
+    .tarif .big { padding: 56px 48px; background: var(--maroon); }
+    .tarif .big strong { display: block; font: 800 clamp(64px, 9vw, 112px) Montserrat, sans-serif; line-height: 1; letter-spacing: -.03em; }
+    .tarif .big span { display: block; margin-top: 12px; max-width: 280px; color: #f0d9df; }
+    .tarif dl { margin: 0; padding: 48px; display: grid; gap: 22px; align-content: center; }
+    .tarif dt { color: #d9a3ae; font-size: 14px; }
+    .tarif dd { margin: 2px 0 0; font: 600 20px Montserrat, sans-serif; }
+
+    .safe { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; margin-top: 44px; }
+    .safe h3 { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; font-size: 19px; }
+    .safe .good h3 i { color: var(--ok); }
+    .safe .bad h3 i { color: #d6404f; }
+    .safe ul { margin: 0; padding: 0; list-style: none; display: grid; gap: 10px; }
+    .safe li { display: flex; gap: 12px; padding: 14px 18px; border: 1px solid var(--line); border-radius: 14px; background: #fff; font-size: 15px; }
+    .safe li i { margin-top: 3px; }
+    .safe .good li i { color: var(--ok); }
+    .safe .bad li i { color: #d6404f; }
+
+    .final { text-align: center; }
+    .final h2 { margin-inline: auto; }
+    .final .cta { justify-content: center; margin-top: 32px; }
+
+    footer { padding: 28px 0 36px; border-top: 1px solid var(--line); text-align: center; font-size: 13px; color: var(--muted); }
+
+    /* ---------- Form Ajukan Akun (dialog) ---------- */
+    dialog {
+      width: min(620px, 100% - 32px); padding: 0; border: 0; border-radius: 24px;
+      box-shadow: 0 30px 80px rgba(61, 15, 29, .35);
+    }
+    dialog::backdrop { background: rgba(61, 15, 29, .55); }
+    dialog form { padding: 28px; }
+    .dlg-head { display: flex; justify-content: space-between; gap: 16px; margin-bottom: 20px; }
+    .dlg-head h2 { font-size: 24px; font-weight: 800; }
+    .dlg-head p { margin: 6px 0 0; color: var(--muted); font-size: 14px; }
+    .x {
+      flex-shrink: 0; width: 36px; height: 36px; border: 0; border-radius: 50%;
+      background: var(--tint); color: var(--maroon); cursor: pointer;
+    }
+    .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    dialog label { display: block; font-size: 13px; font-weight: 600; color: #444; }
+    dialog input, dialog select {
+      width: 100%; margin-top: 5px; padding: 11px 13px; border: 1px solid var(--line);
+      border-radius: 12px; background: #fff; font: inherit; font-size: 15px;
+    }
+    dialog input:focus, dialog select:focus {
+      outline: 0; border-color: var(--maroon); box-shadow: 0 0 0 3px rgba(107, 31, 51, .15);
+    }
+    .msg { min-height: 22px; margin: 14px 0 4px; font-size: 14px; }
+    .msg.err { color: #c0392b; }
+    .msg.ok { color: var(--ok); }
+    .dlg-foot { display: flex; justify-content: flex-end; gap: 12px; margin-top: 8px; }
+    .dlg-foot .btn { padding: 13px 24px; font-size: 15px; }
+
+    /* ---------- Responsive ---------- */
+    @media (max-width: 960px) {
+      .links { display: none; }
+      .hero { grid-template-columns: 1fr; padding-bottom: 56px; }
+      .vis { justify-self: center; margin-top: 24px; max-width: 480px; }
+      .receipt { left: 0; }
+      .mini { right: 0; }
+      .feat, .steps { grid-template-columns: 1fr 1fr; row-gap: 40px; }
+      .steps li::after { display: none; }
+      .tarif, .safe { grid-template-columns: 1fr; }
+      .tarif .big, .tarif dl { padding: 36px 28px; }
+    }
+    @media (max-width: 560px) {
+      .feat, .steps, .grid2 { grid-template-columns: 1fr; }
+      .pills { margin-top: 36px; }
+      .btn-main { padding: 15px 26px; }
+      dialog form { padding: 22px; }
+    }
+    @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } .btn { transition: none; } }
   </style>
 </head>
 
 <body>
+  <div class="wrap">
 
-  <div class="top">
-    <img src="PajakIn/assets/images/logo-maroon.svg" alt="">
-    PajakIn
+    <header class="nav">
+      <a class="brand" href="index.html"><img src="PajakIn/assets/images/logo-maroon.svg" alt="">PajakIn</a>
+    </header>
+
+    <!-- ===== HERO ===== -->
+    <section class="hero">
+      <div>
+        <p class="eyebrow">Pajak UMKM Online</p>
+        <h1>Hitung dan Bayar <span>Pajak</span> Usahamu Tanpa Ribet</h1>
+        <p class="lead">
+          PajakIn menghitung pajak dari omzet bulananmu, menerima bukti pembayaran,
+          dan mencatat setiap statusnya. Semua dalam satu aplikasi!
+        </p>
+        <div class="cta">
+          <a class="btn btn-main" href="PajakIn/login.html">Masuk ke PajakIn</a>
+          <a class="btn btn-line" href="#ajukan" data-open>Ajukan akun</a>
+        </div>
+        <div class="pills" aria-label="Layanan">
+          <span>Hitung pajak</span>
+          <span>Bayar online</span>
+          <span>Unggah bukti</span>
+          <span>Riwayat pembayaran</span>
+          <span>Verifikasi admin</span>
+        </div>
+      </div>
+
+      <div class="vis" aria-hidden="true">
+        <svg class="shape" viewBox="0 0 520 580">
+          <defs>
+            <path id="blob" d="M56 0H464A56 56 0 0 1 520 56V420Q520 452 488 460L96 566Q0 592 0 500V56A56 56 0 0 1 56 0Z"/>
+            <clipPath id="clip"><use href="#blob"/></clipPath>
+          </defs>
+          <use href="#blob" fill="#561627"/>
+          <g clip-path="url(#clip)" fill="#fff" opacity=".07">
+            <rect x="40" y="70" width="440" height="30"/>
+            <rect x="80" y="110" width="50" height="420"/>
+            <rect x="190" y="110" width="50" height="420"/>
+            <rect x="300" y="110" width="50" height="420"/>
+            <rect x="410" y="110" width="50" height="420"/>
+          </g>
+        </svg>
+
+        <div class="receipt">
+          <small>Contoh : Pajak terutang, Oktober 2026</small>
+          <strong class="amt">Rp 90.000</strong>
+          <div class="row"><span>Omzet bulanan</span><b>Rp 18.000.000</b></div>
+          <div class="row"><span>Tarif PPh Final</span><b>0,5%</b></div>
+          <div class="pay">Bayar sekarang</div>
+        </div>
+
+        <div class="mini">
+          <b>Pajak per bulan</b>
+          <div class="bars"><i style="height:45%"></i><i style="height:60%"></i><i style="height:38%"></i><i style="height:72%"></i><i style="height:52%"></i><i style="height:90%"></i></div>
+        </div>
+
+        <div class="chip"><i class="bi bi-patch-check-fill"></i><div>Lunas<small>Diverifikasi admin</small></div></div>
+      </div>
+    </section>
   </div>
 
-  <main>
-    <section>
-      <h1>Selamat Datang!<br>Anda akan masuk ke <span>PajakIn</span></h1>
-
-      <p class="lead">
-        Pastikan Anda menggunakan perangkat dan jaringan yang aman sebelum
-        melanjutkan proses login. Dengan melanjutkan, Anda menyetujui
-        ketentuan penggunaan aplikasi PajakIn.
-      </p>
-
-      <a href="PajakIn/login.html" class="go">
-        Lanjutkan ke Login <i class="bi bi-arrow-right"></i>
-      </a>
-    </section>
-
-    <section class="cards">
-
-      <div class="cd ok">
-        <div class="hd">
-          <span class="ic"><i class="bi bi-shield-check"></i></span>
-          <div>
-            <h2>Praktik Aman</h2>
-            <small>Lindungi akun dengan kebiasaan digital yang aman.</small>
-          </div>
-        </div>
-
-        <div class="it"><i class="bi bi-lock"></i>
-          <div><b>Gunakan password yang kuat</b><span>Buat password unik, panjang, dan sulit ditebak.</span></div>
-        </div>
-        <div class="it"><i class="bi bi-arrow-repeat"></i>
-          <div><b>Perbarui sistem dan peramban</b><span>Pastikan OS dan browser selalu mutakhir.</span></div>
-        </div>
-        <div class="it"><i class="bi bi-wifi"></i>
-          <div><b>Akses dari jaringan tepercaya</b><span>Gunakan jaringan, wifi, atau VPN yang tepercaya.</span></div>
-        </div>
-      </div>
-
-      <div class="cd no">
-        <div class="hd">
-          <span class="ic"><i class="bi bi-exclamation-triangle"></i></span>
-          <div>
-            <h2>Hindari Hal Ini</h2>
-            <small>Kebiasaan yang dapat membahayakan akun Anda.</small>
-          </div>
-        </div>
-
-        <div class="it"><i class="bi bi-person-x"></i>
-          <div><b>Membagikan password</b><span>Jangan berikan password kepada siapa pun.</span></div>
-        </div>
-        <div class="it"><i class="bi bi-link-45deg"></i>
-          <div><b>Mengklik tautan mencurigakan</b><span>Hindari tautan asing dari WhatsApp atau email.</span></div>
-        </div>
-        <div class="it"><i class="bi bi-unlock"></i>
-          <div><b>Meninggalkan perangkat terbuka</b><span>Selalu kunci perangkat Anda saat tidak digunakan.</span></div>
-        </div>
-      </div>
-
-    </section>
-  </main>
-
   <footer>
-    &copy; 2026 PajakIn. Created For - PBL Workshop Desain Web (bukan layanan pajak resmi).
+    <div class="wrap">&copy; 2026 PajakIn. Proyek PBL Workshop Desain Web (simulasi, bukan layanan pajak resmi).</div>
   </footer>
 
+ <!-- ===== FORM AJUKAN AKUN ===== -->
+  <dialog id="ajukan" aria-labelledby="aj-title">
+    <form id="rf" novalidate>
+      <div class="dlg-head">
+        <div>
+          <h2 id="aj-title">Ajukan akun UMKM</h2>
+          <p>Isi data usaha Anda. Admin akan memeriksa pengajuan, lalu membuatkan akunnya.</p>
+        </div>
+        <button type="button" class="x" data-close aria-label="Tutup"><i class="bi bi-x-lg"></i></button>
+      </div>
+
+      <div class="grid2">
+        <label>Nama usaha
+          <input id="r_nama" placeholder="Contoh: Warung Bu Sari" autocomplete="organization">
+        </label>
+        <label>Nama pemilik
+          <input id="r_pem" placeholder="Nama lengkap" autocomplete="name">
+        </label>
+        <label>ID pengguna (NIK/NPWP/NITKU)
+          <input id="r_uid" inputmode="numeric" placeholder="Angka, 10-20 digit">
+        </label>
+        <label>Password
+          <input id="r_pw" type="password" placeholder="Minimal 6 karakter" autocomplete="new-password">
+        </label>
+        <label>Jenis usaha
+          <select id="r_jn">
+            <option>Kuliner</option>
+            <option>Perdagangan</option>
+            <option>Jasa</option>
+          </select>
+        </label>
+        <label>Nomor telepon
+          <input id="r_tel" inputmode="tel" placeholder="0812-xxxx-xxxx" autocomplete="tel">
+        </label>
+        <label class="full">Perkiraan omzet setahun (Rp)
+          <input id="r_om" type="number" min="0" inputmode="numeric" placeholder="Contoh: 650000000">
+          <span id="r_hint" class="hint"></span>
+        </label>
+        <label class="full" id="r_bk_wrap" hidden>Bukti omzet tahunan (JPG, PNG, atau PDF)
+          <input id="r_bk" type="file" accept=".jpg,.jpeg,.png,.pdf">
+          <span class="hint">Contoh: rekap penjualan setahun, laporan keuangan sederhana, atau SPT tahun lalu.</span>
+        </label>
+      </div>
+
+      <div id="rmsg" class="msg" role="status"></div>
+
+      <div class="dlg-foot">
+        <button type="button" class="btn btn-line" data-close>Batal</button>
+        <button type="submit" class="btn btn-main">Kirim pengajuan</button>
+      </div>
+    </form>
+  </dialog>
+
+  <script src="PajakIn/assets/js/global.js"></script>
+  <script>
+    // Buka dan tutup form pengajuan
+    const dlg = document.getElementById('ajukan');
+
+    document.querySelectorAll('[data-open]').forEach((a) =>
+      a.addEventListener('click', (e) => {
+        e.preventDefault();
+        rmsg.textContent = '';
+        dlg.showModal();
+      })
+    );
+    document.querySelectorAll('[data-close]').forEach((b) =>
+      b.addEventListener('click', () => dlg.close())
+    );
+    dlg.addEventListener('click', (e) => { if (e.target === dlg) dlg.close(); });
+
+    // Petunjuk omzet: bukti omzet hanya diminta kalau omzet setahun di atas ambang
+    const updateHint = () => {
+      const om = Number(r_om.value),
+        ambang = taxRate.ambang,
+        batas = taxRate.batas;
+
+      r_bk_wrap.hidden = !(r_om.value !== '' && om > ambang);
+      r_hint.className = 'hint';
+
+      if (r_om.value === '' || om <= ambang) {
+        r_hint.textContent = 'Omzet ≤ ' + rp(ambang) + ' per tahun tidak dikenai PPh Final UMKM.';
+      } else if (om <= batas) {
+        r_hint.textContent = 'Omzet di atas ' + rp(ambang) + ' per tahun wajib melampirkan bukti omzet.';
+      } else {
+        r_hint.className = 'hint warn';
+        r_hint.textContent = 'Omzet melebihi batas skema PPh Final (' + rp(batas) + '). Admin akan meninjau pengajuan ini.';
+      }
+    };
+
+    r_om.addEventListener('input', updateHint);
+    updateHint();
+
+    // Kirim pengajuan: disimpan ke reqData, lalu muncul di Data UMKM (admin)
+    rf.onsubmit = async (e) => {
+      e.preventDefault();
+
+      const v = {
+        nama: r_nama.value.trim(),
+        pem: r_pem.value.trim(),
+        uid: r_uid.value.trim(),
+        pw: r_pw.value,
+        tel: r_tel.value.trim(),
+      };
+      const om = Number(r_om.value),
+        perluBukti = r_om.value !== '' && om > taxRate.ambang,
+        file = r_bk.files[0];
+
+      const tampil = (teks, ok) => {
+        rmsg.textContent = teks;
+        rmsg.className = 'msg ' + (ok ? 'ok' : 'err');
+      };
+
+      if (!v.nama || !v.pem || !v.uid || !v.pw || !v.tel || r_om.value === '') return tampil('Semua kolom wajib diisi.');
+      if (!/^\d{10,20}$/.test(v.uid)) return tampil('ID pengguna harus berupa angka (10-20 digit).');
+      if (v.pw.length < 6) return tampil('Password minimal 6 karakter.');
+      if (!/^[\d\s+-]{8,}$/.test(v.tel)) return tampil('Nomor telepon tidak valid.');
+      if (om < 0) return tampil('Omzet tidak boleh negatif.');
+      if (perluBukti) {
+        if (!file) return tampil('Unggah bukti omzet tahunan karena omzet di atas ' + rp(taxRate.ambang) + '.');
+        if (!/\.(jpe?g|png|pdf)$/i.test(file.name)) return tampil('Format bukti harus JPG, PNG, atau PDF.');
+        if (file.size > 5 * 1024 * 1024) return tampil('Ukuran bukti maksimal 5 MB.');
+      }
+      if (umkmData.some((u) => u.id === v.uid)) return tampil('ID pengguna sudah terdaftar. Silakan masuk.');
+      if (reqData.some((r) => r.uid === v.uid && r.status === 'Menunggu')) {
+        return tampil('Pengajuan dengan ID ini sedang diperiksa admin.');
+      }
+
+      reqData.push({
+        id: Date.now(),
+        uid: v.uid,
+        pw: v.pw,
+        nama: v.nama,
+        pemilik: v.pem,
+        jenis: r_jn.value,
+        telp: v.tel,
+        omzetTahun: om,
+        bukti: perluBukti ? file.name : '',
+        img: perluBukti ? await readImg(file) : '',
+        tgl: tgl(),
+        status: 'Menunggu',
+      });
+      save();
+
+      rf.reset();
+      updateHint();
+      tampil('Pengajuan terkirim! Setelah admin menyetujui, masuk dengan ID dan password yang Anda isi.', true);
+      setTimeout(() => dlg.close(), 3000);
+    };
+  </script>
 </body>
 </html>
