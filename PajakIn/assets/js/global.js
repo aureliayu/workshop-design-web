@@ -171,7 +171,22 @@ const D0 = {
         ambang: 500000000,
         batas: 4800000000,
         dasar: 'PP 55/2022'
-    }
+    },
+
+    // Contoh pengajuan akun yang menunggu persetujuan admin
+    req: [
+        {
+            id: 1,
+            uid: '3578010101900005',
+            pw: 'umkm123',
+            nama: 'Bengkel Sinar Motor',
+            pemilik: 'Rudi Santoso',
+            jenis: 'Jasa',
+            telp: '0821-9087-6610',
+            tgl: '20 Nov 2026',
+            status: 'Menunggu'
+        }
+    ]
 };
 
 const BLN = [
@@ -190,10 +205,12 @@ try {
 } catch (e) {}
 
 DB = DB || JSON.parse(JSON.stringify(D0));
+DB.req = DB.req || [];
 
 window.umkmData = DB.umkm;
 window.paymentData = DB.pay;
 window.taxRate = DB.tax;
+window.reqData = DB.req;
 
 const save = () => {
     try {
@@ -202,7 +219,8 @@ const save = () => {
             JSON.stringify({
                 umkm: umkmData,
                 pay: paymentData,
-                tax: taxRate
+                tax: taxRate,
+                req: reqData
             })
         );
     } catch (e) {
@@ -234,7 +252,9 @@ const BC = {
     'Ditolak': 'danger',
     'Belum Bayar': 'secondary',
     'Aktif': 'success',
-    'Nonaktif': 'secondary'
+    'Nonaktif': 'secondary',
+    'Menunggu': 'warning',
+    'Disetujui': 'success'
 };
 
 const bdg = s => `
@@ -303,10 +323,15 @@ function render(title, sub, html, search) {
     const u = me(),
         pg = document.body.dataset.page;
 
+    const wait = paymentData.filter(p => p.status === 'Menunggu Verifikasi').length;
+    const pend = reqData.filter(r => r.status === 'Menunggu').length;
+    const badge = { 'verifikasi-pembayaran': wait, 'data-umkm': pend };
+
     const nav = MENU[u.role].map(([f, t, i]) => `
         <a href="${f}.html" class="${f === pg ? 'on' : ''}">
-            <i class="bi bi-${i}"></i>
+            <span class="ni"><i class="bi bi-${i}"></i></span>
             ${t}
+            ${u.role === 'admin' && badge[f] ? `<em class="nb">${badge[f]}</em>` : ''}
         </a>
     `).join('');
 
@@ -315,7 +340,7 @@ function render(title, sub, html, search) {
 
             <aside class="sb">
                 <div class="brand">
-                    <img src="${ROOT}assets/images/logo-white.svg" class="logo" alt="">
+                    <span class="lt"><img src="${ROOT}assets/images/logo-white.svg" class="logo" alt=""></span>
                     PajakIn
                 </div>
 
