@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="id">
 
@@ -6,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Login | PajakIn</title>
 
-    <link rel="icon" href="assets/images/logo-maroon.svg">
+    <link rel="icon" href="assets/images/logo-white.svg">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
@@ -15,72 +16,91 @@
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background: #f8f7f7;
+            background: #641d32;
         }
 
-        .login-page {
+        .login {
             min-height: 100vh;
             display: flex;
             flex-direction: column;
-        }
-
-        .login-header {
-            padding: 28px 7%;
+            align-items: center;
+            justify-content: center;
+            padding: 30px 20px;
+            background: #641d32;
         }
 
         .login-brand {
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            color: #641d32;
-            font-size: 22px;
-            font-weight: 700;
-            text-decoration: none;
-        }
-
-        .login-brand img {
-            width: 34px;
-            height: 34px;
-        }
-
-        .login-main {
-            flex: 1;
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 30px 20px 60px;
+            gap: 10px;
+            color: #fff;
+            font-size: 24px;
+            font-weight: 700;
+            text-decoration: none;
+            margin-bottom: 28px;
         }
 
-        .login-card {
+        .login-brand img {
+            width: 38px;
+            height: 38px;
+        }
+
+        .lc {
             width: 100%;
-            max-width: 440px;
+            max-width: 460px;
             background: #fff;
             padding: 42px;
-            border-radius: 24px;
-            box-shadow: 0 10px 35px rgba(0, 0, 0, 0.06);
+            border-radius: 22px;
+            box-shadow: 0 15px 45px rgba(0, 0, 0, 0.15);
         }
 
-        .login-card .form-control {
+        .lc .form-control {
             padding: 12px 14px;
             border-radius: 9px;
         }
 
-        .login-card .form-control:focus {
+        .lc .form-control:focus {
             border-color: #641d32;
             box-shadow: 0 0 0 0.2rem rgba(100, 29, 50, 0.12);
         }
 
-        .login-card .btn-maroon {
+        .lc .btn-maroon {
             padding: 12px;
             border-radius: 9px;
         }
 
-        .login-footer {
-            padding: 20px;
-            text-align: center;
-            color: #777;
+        .demo-account {
+            background: #f8edf0;
+            border: 1px solid #ead1d9;
+            border-radius: 12px;
+            padding: 16px;
+        }
+
+        .demo-title {
+            color: #641d32;
+            font-weight: 700;
+            font-size: 14px;
+        }
+
+        .demo-label {
+            color: #641d32;
+            font-weight: 600;
+        }
+
+        .demo-account code {
+            color: #333;
+            font-family: 'Inter', sans-serif;
             font-size: 13px;
-            border-top: 1px solid #eee;
+            font-weight: 600;
+            word-break: break-word;
+        }
+
+        .login-footer {
+            color: rgba(255, 255, 255, 0.75);
+            font-size: 13px;
+            text-align: center;
+            margin-top: 28px;
         }
 
         .login-link {
@@ -94,11 +114,7 @@
         }
 
         @media (max-width: 576px) {
-            .login-header {
-                padding: 22px 6%;
-            }
-
-            .login-card {
+            .lc {
                 padding: 30px 24px;
             }
         }
@@ -107,89 +123,95 @@
 
 <body>
 
-    <div class="login-page">
+    <div class="login">
 
-        <!-- Header -->
-        <header class="login-header">
-            <a href="index.html" class="login-brand">
-                <img src="assets/images/logo-maroon.svg" alt="Logo PajakIn">
-                PajakIn
-            </a>
-        </header>
+        <!-- Logo and App Name -->
+        <a href="index.html" class="login-brand">
+            <img src="assets/images/logo-white.svg" alt="Logo PajakIn">
+            PajakIn
+        </a>
 
         <!-- Login Form -->
-        <main class="login-main">
+        <form class="lc" id="lf">
 
-            <form class="login-card" id="lf">
+            <h2 class="h4 text-center fw-bold">
+                Selamat Datang!
+            </h2>
 
-                <h1 class="h3 text-center fw-bold mb-2">
-                    Selamat Datang!
-                </h1>
+            <p class="text-center text-muted small mb-4">
+                Masuk untuk mengakses layanan PajakIn
+            </p>
 
-                <p class="text-center text-muted mb-4">
-                    Masuk ke akun PajakIn kamu
-                </p>
+            <label for="uid" class="form-label small">
+                ID Pengguna
+            </label>
 
-                <label for="uid" class="form-label small">
-                    ID Pengguna
-                </label>
+            <input
+                id="uid"
+                class="form-control mb-3"
+                placeholder="NIK/NPWP/NITKU"
+                autocomplete="username"
+            >
 
-                <input
-                    id="uid"
-                    class="form-control mb-3"
-                    placeholder="NIK/NPWP/NITKU"
-                    autocomplete="username"
-                >
+            <label for="pw" class="form-label small">
+                Password
+            </label>
 
-                <label for="pw" class="form-label small">
-                    Password
-                </label>
+            <input
+                id="pw"
+                type="password"
+                class="form-control mb-3"
+                placeholder="Masukkan password"
+                autocomplete="current-password"
+            >
 
-                <input
-                    id="pw"
-                    type="password"
-                    class="form-control mb-3"
-                    placeholder="Masukkan password"
-                    autocomplete="current-password"
-                >
+            <div id="err" class="text-danger small mb-2"></div>
 
-                <div id="err" class="text-danger small mb-2"></div>
+            <button class="btn btn-maroon w-100">
+                Masuk
+            </button>
 
-                <button class="btn btn-maroon w-100">
-                    Masuk
-                </button>
+            <p class="text-muted small text-center mt-3 mb-0">
+                Akun UMKM dibuat oleh Admin.
+            </p>
 
-                <p class="text-muted small text-center mt-4 mb-0">
-                    Akun UMKM dibuat oleh Admin.
-                </p>
+            <p class="text-center small mt-3 mb-0">
+                Belum memiliki akun?
+                <a href="index.html" class="login-link">
+                    Ajukan akun
+                </a>
+            </p>
 
-                <p class="text-center small mt-3 mb-0">
-                    Belum memiliki akun?
-                    <a href="https://pajak-in.vercel.app/" class="login-link">
-                        Ajukan akun
-                    </a>
-                </p>
+            <!-- Demo Account Highlight -->
+            <div class="demo-account mt-4">
 
-                <!-- Demo Account -->
-                <div class="border-top mt-4 pt-3">
-                    <p class="text-muted small text-center mb-2">
-                        Akun Demo
-                    </p>
-
-                    <p class="text-muted small text-center mb-1">
-                        Admin: admin / admin123
-                    </p>
-
-                    <p class="text-muted small text-center mb-0">
-                        UMKM: 3578010101900001 / umkm123
-                    </p>
+                <div class="demo-title text-center mb-3">
+                    <i class="bi bi-info-circle-fill me-1"></i>
+                    Akun Demo
                 </div>
 
-            </form>
+                <div class="mb-3">
+                    <div class="demo-label small mb-1">
+                        <i class="bi bi-person-badge me-1"></i>
+                        Admin
+                    </div>
 
-        </main>
+                    <code>admin / admin123</code>
+                </div>
 
-        <!-- Footer -->
+                <div>
+                    <div class="demo-label small mb-1">
+                        <i class="bi bi-shop me-1"></i>
+                        UMKM
+                    </div>
+
+                    <code>3578010101900001 / umkm123</code>
+                </div>
+
+            </div>
+
+        </form>
+
         <footer class="login-footer">
             © 2026 PajakIn. Simulasi layanan pajak UMKM.
         </footer>
